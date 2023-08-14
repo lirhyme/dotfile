@@ -56,12 +56,23 @@ inoremap jk <ESC>
 " plugin manager
 " vim-plug install packages
 " ***************************
+let g:github="git@github.com:"
 call plug#begin()
 
 Plug 'git@github.com:preservim/nerdtree.git',{ 'on': 'NERDTreeToggle' }
 Plug 'git@github.com:907th/vim-auto-save.git'
 Plug 'git@github.com:easymotion/vim-easymotion.git'
 Plug 'git@github.com:tomasr/molokai.git'
+
+Plug 'git@github.com:junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'git@github.com:junegunn/fzf.vim'
+
+Plug 'git@github.com:vim-airline/vim-airline'
+Plug 'git@github.com:vim-airline/vim-airline-themes'
+
+Plug 'git@github.com:neoclide/coc.nvim', {'branch': 'release'}
+Plug 'git@github.com:SirVer/ultisnips' 
+Plug 'git@github.com:honza/vim-snippets'
 
 call plug#end()
 
@@ -70,8 +81,43 @@ nnoremap <silent><leader>e :NERDTreeToggle<CR>
 nnoremap <silent><leader>n :NERDTreeFocus<CR>
 " 
 
-"*** vim-auto-save ***
+" *** vim-auto-save ***
 let g:auto_save=1
 let g:auto_save_silent=1
 let g:auto_save_events = ["InsertLeave", "TextChanged"]
 
+
+" *** fzf ***
+let g:fzf_preview_window = ['hidden,right,50%,<70(up,40%)', 'ctrl-/']
+
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+" ************* airline ****************************
+let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+" *************** coc ********
+
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" ******** ultisnips *****
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
